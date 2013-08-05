@@ -1,0 +1,129 @@
+<!DOCTYPE html> 
+<html> 
+  <head> 
+    <title>Zlidy is not Slidy</title> 
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" /> 
+    <meta name="font-size-adjustment" content="3" /> 
+    <meta name="author" content="Tetsuya HAYASHI" /> 
+    <meta name="copyright" content="Copyright &#169; 2013 ビューポイントテクノロジー" />
+    <link rel="stylesheet" type="text/css" href='css/style.css' /> 
+    <link rel="stylesheet" type="text/css" media="screen, projection, print" 
+	  href="./css/slidy.css" /> 
+    <link rel="stylesheet" type="text/css" media="screen, projection, print" 
+	  href="./css/user.css" /> 
+
+    <link type="image/x-icon" rel="shortcut icon" href="/favicon.ico"/> 
+    <link href='http://fonts.googleapis.com/css?family=Istok+Web' rel='stylesheet' type='text/css'> 
+    <script type='text/javascript' src='js/amber.js'></script> 
+  </head> 
+  <body> 
+
+      <div class="slide cover"><span><br clear="all"></span><br><br>
+	<h1>amber でスライドツール</h1> 
+      <hr>
+	<p style='float: right; text-align: right'>2013/06/26, 第54回Smalltalk勉強会＠東京</p>
+	<p style='float: right; text-align: right'>ビューポイントテクノロジー, 林徹也</p>
+      </div>
+
+      <div class="slide">
+	<h1>動機</h1>
+	<p>以前に Jtalk (amber) の発表をした時の資料は W3C <sup>&#xAE;</sup> の Slidy で作成。</p>
+	<p>↓</p>
+	<p>今回、起死回生でスライドツールを amber で作ってみる。</p>
+	<p>↓</p>
+	<p>なお、プレゼンテーション用フレームワークは amber の examples にもありますが、ここはあくまで XHTML を読み込むタイプにこだわります</p>
+      </div>
+
+      <div class="slide">
+	<h1>結果</h1>
+	<p>とりあえず、なんか動いた</p>
+	<pre>&lt;div class="slide"&gt;でスライドを定義</pre>
+	<pre>ただし、←→キーで推移するだけｗ</pre>
+	<hr />
+	<h2><span style="color: yellow;">命名：Slidy ならぬ Zlidy</span></h2>
+      </div>
+      <div class="slide">
+	<h1>SlidyにあってZlidyにないもの</h1>
+	<ul class="incremental">
+	  <li>背景指定機能</li>
+	  <li>duration(残り時間通知)機能</li>
+	  <li>インクリメンタル表示機能</li>
+	  <li>アウトライン表示機能</li>
+	  <li>その他もろもろ(キーバインドとかヘルプとか)</li>
+	  <li>……</li>
+	</ul>
+	<h2><span style="color: red;">つまり、ほとんどない</span></h2>
+      </div>
+
+      <div class="slide">
+	<h1>その他気付いたこと</h1>
+	<dl>
+	  <dt>メッセージカテゴリ（プロトコル）はやはり便利</dt>
+	  <dd>↑素でJavaScripのソースを読むのはタイヘン</dd>
+	  <dt>amber自体にはDOMクラスなどは特に用意されてない</dt>
+	  <dd>↑JSで直接操作できるから？</dd>
+	  <dd>↑というよりjQueryあるだろ</dd>
+	  <dt>返って来るリストのインデックスは0スタート</dt>
+	  <dd>NodeListとか扱う時やっかい</dd>
+	  <dd>やはりラッパクラスを作るべきか？</dd>
+	</dl>
+      </div>
+
+      <div class="slide">
+	<h1>amber-0.10で気付いた点</h1>
+	<p>今回はamber-0.10を使った。</p>
+	<dl>
+	  <dt>repeat が無かった</dt>
+	  <dd>見つからなかった</dd>
+	  <dt>fork 出来るようになった</dt>
+	  <dd>ForkPoolなるもので管理</dd>
+	  <dd>でもProcessに相当するもの見つけられず</dd>
+	  <dt>タイマーは？</dt>
+	  <dd>見つからなかった</dd>
+	</dl>
+      </div>
+
+      <div class="slide">
+	<h1>反省点</h1>
+	<dl>
+	  <dt>Slidy をパクリ過ぎ</dt>
+	  <dd>
+	    <ul>
+	      <li>パクるというより、これはすでに「トレス」<br>
+		完全に一致(ry</li>
+	      <li>JSのまま持ってきてるので<br>
+		メソッド名とか分かり難い</li>
+	    </ul>
+	  </dd>
+	  <dt>JQueryとか使ってない</dt>
+	  <dd>トレス故にJQeuryとか使わないでなんか頑張ってる</dd>
+	  <dd>WidgetクラスのrenderOn:とかも使ってない</dd>
+	</dl>
+      </div>
+
+      <div class="slide">
+	<h1>今後の課題</h1>
+	<ul>
+	  <dt>リファクタリング</dt>
+	  <dd>というより、再実装??少なくともjQuery使う</dd>
+	  <dd>Slidyとの互換は維持しながら独自フィーチャー盛り込む</dd>
+	  <dd>ベクタ図形とか</dd>
+	  <dd>画面エフェクトも</dd>
+	  <dt>編集機能も考える</dt>
+	  <dd>スライドツールからでも編集可能に</dd>
+	  <dt>品質？？</dt>
+	  <dd>各種ブラウザにも対応(ちょっとムリ？？)</dd>
+	</ul>
+      </div>
+      <script type='text/javascript'> 
+	loadAmber({
+	files: ['Zlidy-Core'],
+	packageHome: './',
+	ready: function() {
+<!--	var zlidy = smalltalk.Zlidy._default(); -->
+smalltalk.Browser._open();
+	}
+	});
+      </script> 
+  </body> 
+</html> 
