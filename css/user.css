@@ -1,6 +1,6 @@
 @media all{
  body{
-  margin:0%;
+  margin:5%;
   padding:5%;
   background:#222;
   color:#fff;
@@ -9,9 +9,11 @@
  h1,h2,h3,h4{
   margin:0%;
   padding:0%;
+//  color: limegreen;
+  color: #8CFF9F;
  }
  h1{
-  font-size:180%;
+  font-size:200%;
   border-bottom:1px solid #666
  }
  h2{
@@ -40,13 +42,21 @@
  li li { font-size: 85%; font-style: italic; }
  li li li { font-size: 85%; font-style: normal; }
 
- 
- a:visited { color: lightgreen; }
- a:link { color: lightgreen; }
+// ol.li {}
+ ol.li li {list-style-type: lower-roman;}
+
+ a:visited { color: lightblue; }
+ a:link { color: lightblue; }
  a:hover { color: red; text-decoration: underline; }
  a:active { color: red; text-decoration: underline; }
 
  dt {font-size: 120%; text-decoration: underline; }
+
+div.slide {
+    
+
+}
+
 
 div.slidy_toc .toc_heading {
   text-align: center;
@@ -71,6 +81,24 @@ div.toolbar {
   border-top: solid 1px rgb(180,180,180);
 }
 
+.takahashi {
+    text-align: center;
+    font-size: 64px;
+}
 
+}
+@media print{
 
+ body{
+  margin:0%;
+  padding:5%;
+  color:#000;
+  font-family:"Meiryo","Verdana","Helvetica","Tahoma",sans-serif;
+ }
+ image {
+     background-color: white;
+ }
+ pre {
+     color:#000;
+ }
 }

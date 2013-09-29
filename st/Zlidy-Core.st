@@ -1,6 +1,6 @@
 Smalltalk current createPackage: 'Zlidy-Core'!
 Object subclass: #Zlidy
-	instanceVariableNames: 'toolbar slides initialized slideNumber slideNumberElement sizeIndex lastWidth lastHeight lastShown sizeAdjustment incrementalElements backgrounds eos'
+	instanceVariableNames: 'toolbar slides initialized slideNumber slideNumberElement sizeIndex lastWidth lastHeight lastShown sizeAdjustment incrementalElements backgrounds eos colorPicker'
 	package: 'Zlidy-Core'!
 
 !Zlidy methodsFor: 'DOM accessing'!
@@ -30,12 +30,10 @@ nextIncrementalItem: aNode
     [node := self nextNode: slide with: node.
 	(node isNil or: [(node parentNode) isNil])] whileFalse: [
 	    (node nodeType = 1)
-			ifTrue: [Transcript show: 'ccc '; show: node nodeName; show: (self hasClass: node with: 'incremental') ;cr.
-			(node nodeName asLowercase = br) 
+			ifTrue: [	(node nodeName asLowercase = br) 
 				ifFalse: [
 					(self hasClass: node with: 'incremental') & ((self okayForIncremental: node nodeName ) notNil)
-    					ifTrue: [Transcript show: 'nextInc'; cr.
-							^node].
+    					ifTrue: [^node].
             	 	(self  hasClass: node parentNode with: 'incremental') & ((self hasClass: node with: 'non-incremental') not)
     					ifTrue: [^node]]
 					]
@@ -46,7 +44,6 @@ nextIncrementalItem: aNode
 
 nextNode: root with: aNode
   	| node |
-	Transcript show: 'root ==>'; show: root nodeName;cr.
   	aNode ifNil: [^root firstChild].
 
     (aNode firstChild) ifNotNil: [^aNode firstChild].
@@ -55,7 +52,7 @@ nextNode: root with: aNode
 
 	node := aNode.
 	[node := node parentNode.
-	(node notNil or:[ node == root])] whileFalse: [Transcript show: 'parent==>'; show: node nodeName ;cr.
+	(node notNil or:[ node == root])] whileFalse: [
 		((node notNil) and: [node nextSibling notNil]) ifTrue: [
 			^node nextSibling]] .
  	^nil
@@ -88,27 +85,6 @@ okayForIncremental: name
 		incrementalElements := list
 		].
 		^incrementalElements at: name asLowercase ifAbsent: [nil].
-!
-
-oldnextIncrementalItem: node
-	| br slide next |
-    br := 'br'.
-    slide := self slides at: slideNumber.
-	next := node.
-    [next := self nextNode: slide with: next.
-	(next isNil or: [(next parentNode) isNil])] whileFalse: [
-	    (next nodeType = 1)
-			ifTrue: [(next nodeName asLowercase == br)
-				ifTrue: []
-				ifFalse: [(self hasClass: next with: 'incremental') ifTrue: [Transcript show: 'inrement'; cr.].
-					(self hasClass: next with: 'incremental') & ((self okayForIncremental: next nodeName ) notNil)
-    					ifTrue: [Transcript show: 'nextInc'; cr.
-							^next].
-             	 	(self  hasClass: next parentNode with: 'incremental') & ((self hasClass: next with: 'non-incremental') not)
-    					ifTrue: [^next]]]
-			ifFalse: [].
-		].
- 	^next
 !
 
 previousIncrementalItem: node
@@ -153,6 +129,12 @@ revealNextItem: aNode
 ! !
 
 !Zlidy methodsFor: 'accessing'!
+
+colorPicker
+
+	colorPicker ifNil: [self createColorPicker].
+	^colorPicker
+!
 
 lastShown
 	^lastShown
@@ -233,7 +215,7 @@ keyDown: anEvent
 !Zlidy methodsFor: 'initialization'!
 
 addToolbar
-	| right counter left button gap1 gap2 copyright ide |
+	| right counter cpButton left button gap1 gap2 copyright ide |
 	toolbar := document createElement: 'div'.
 	toolbar asJQuery addClass: 'toolbar'.
 	toolbar asJQuery css: 'display' with: 'block'.
@@ -241,6 +223,8 @@ addToolbar
 	right := document createElement: 'div'.
 	right asJQuery css: 'float' with: 'right'.
 	right asJQuery css: 'text-align' with: 'right'.
+	
+	right appendChild: self colorPicker.
 	
 	eos := document createElement: 'span'.
 	eos asJQuery html: '* '.
@@ -352,9 +336,8 @@ nextSlide: incremental
 	(incremental or: [self slideNumber == self slides size])
 		ifTrue: [self lastShown: (self revealNextItem: self lastShown)].
 		
-	((incremental not or: [self lastShown isNil]) and: [self slideNumber <= self slides size])
+	((incremental not or: [self lastShown isNil]) and: [self slideNumber < self slides size])
 		ifTrue: [
-			Transcript show: 'vvv';cr.
 			slide := self slides at: self slideNumber.
      	   self hideSlide: slide.
         	slideNumber := slideNumber + 1.
@@ -449,6 +432,18 @@ showSlideNumber
 ! !
 
 !Zlidy methodsFor: 'utilities'!
+
+addColorPicker
+
+	toolbar appendChild: self createColorPicker
+!
+
+createColorPicker
+
+	colorPicker := document createElement: 'input'.
+	colorPicker asJQuery addClass: 'color'.
+	^colorPicker
+!
 
 hasClass: aJSObject with: aString
 	| regexp |
