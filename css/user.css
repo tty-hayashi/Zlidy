@@ -52,8 +52,10 @@
 
  dt {font-size: 120%; text-decoration: underline; }
 
+// とりあえずサイズ固定
 div.slide {
-    
+    width: 27.51 cm;
+    height: 19.05 cm;
 
 }
 
